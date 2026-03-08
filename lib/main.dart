@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
@@ -84,9 +85,7 @@ void main() async {
   // is ready and fully decoupled from the Flutter widget lifecycle on iOS.
   final audioHandler = await initAudioService();
 
-  runApp(
-    AudioServiceWidget(
-      child: MultiProvider(
+  final Widget appWithProviders = MultiProvider(
         providers: [
         Provider<StorageService>.value(value: storageService),
         Provider<SubsonicService>.value(value: subsonicService),
@@ -119,8 +118,14 @@ void main() async {
         ChangeNotifierProvider(create: (_) => LibraryProvider(subsonicService)),
       ],
       child: const MuslyApp(),
-    ),
-    ),
+    );
+
+  // AudioServiceWidget is only needed on iOS where AudioService.init() was
+  // called.  On Android/desktop wrapping with it would break the app.
+  runApp(
+    (!kIsWeb && Platform.isIOS)
+        ? AudioServiceWidget(child: appWithProviders)
+        : appWithProviders,
   );
 }
 

@@ -166,17 +166,25 @@ class MuslyAudioHandler extends BaseAudioHandler with SeekHandler {
 
 /// Initialises [audio_service] and returns the singleton [MuslyAudioHandler].
 /// Call this once from [main()] before [runApp()].
+///
+/// On iOS, AudioService.init() is called so the audio engine runs as a proper
+/// background service, driving the Control Center and lock screen.
+/// On all other platforms (Android, desktop, web) the handler is created
+/// directly — Android manages its own MediaBrowserServiceCompat (MusicService)
+/// for Android Auto and we must not start a second service on top of it.
 Future<MuslyAudioHandler> initAudioService() async {
-  return AudioService.init(
-    builder: () => MuslyAudioHandler(),
-    config: AudioServiceConfig(
-      androidNotificationChannelId: 'com.devid.musly.channel.audio',
-      androidNotificationChannelName: 'Musly',
-      androidNotificationOngoing: true,
-      androidStopForegroundOnPause: true,
-      // Artwork is served from the URL set in mediaItem; let audio_service
-      // fetch it rather than pre-caching to avoid duplicate requests.
-      preloadArtwork: !kIsWeb && !Platform.isIOS,
-    ),
-  );
+  if (!kIsWeb && Platform.isIOS) {
+    return AudioService.init(
+      builder: () => MuslyAudioHandler(),
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.devid.musly.channel.audio',
+        androidNotificationChannelName: 'Musly',
+        androidNotificationOngoing: true,
+        androidStopForegroundOnPause: true,
+        preloadArtwork: false,
+      ),
+    );
+  }
+  // Android / desktop / web: no AudioService wrapper needed.
+  return MuslyAudioHandler();
 }
