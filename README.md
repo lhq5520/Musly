@@ -4,7 +4,7 @@
 
 🌐 **Website:** ~~musly.devid.ink~~ (Temporarily unavailable)
 
-[![Download Musly](https://img.shields.io/badge/Download-Musly%20v1.0.6-fa243c?style=for-the-badge&logo=github)](https://github.com/dddevid/Musly/releases/tag/v1.0.6)
+[![Download Musly](https://img.shields.io/badge/Download-Musly%20v1.0.8-fa243c?style=for-the-badge&logo=github)](https://github.com/dddevid/Musly/releases/tag/v1.0.8)
 [![Navidrome Client](https://img.shields.io/badge/Navidrome-Client-blue?style=for-the-badge)](https://musly.devid.ink)
 [![Subsonic Client](https://img.shields.io/badge/Subsonic-Client-green?style=for-the-badge)](https://musly.devid.ink)
 
