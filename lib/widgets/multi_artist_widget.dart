@@ -119,7 +119,7 @@ class MultiArtistWidget extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => _ArtistsBottomSheet(
+      builder: (ctx) => ArtistsBottomSheet(
         artists: artistList,
         onArtistTap: (artist) {
           Navigator.pop(ctx);
@@ -202,11 +202,12 @@ class MultiArtistWidget extends StatelessWidget {
   }
 }
 
-class _ArtistsBottomSheet extends StatelessWidget {
+class ArtistsBottomSheet extends StatelessWidget {
   final List<ArtistRef> artists;
   final void Function(ArtistRef) onArtistTap;
 
-  const _ArtistsBottomSheet({
+  const ArtistsBottomSheet({
+    super.key,
     required this.artists,
     required this.onArtistTap,
   });

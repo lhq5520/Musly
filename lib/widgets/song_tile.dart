@@ -410,15 +410,7 @@ class _SongOptionsSheetState extends State<_SongOptionsSheet> {
                       title: 'Go to Artist',
                       onTap: () {
                         Navigator.pop(context);
-                        if (widget.song.artistId != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ArtistScreen(artistId: widget.song.artistId!),
-                            ),
-                          );
-                        }
+                        _navigateToArtist(context);
                       },
                     ),
                     _buildRatingTile(context),
@@ -727,6 +719,40 @@ class _SongOptionsSheetState extends State<_SongOptionsSheet> {
           ),
         );
       }
+    }
+  }
+
+  void _navigateToArtist(BuildContext context) {
+    final participants = widget.song.artistParticipants;
+
+    if (participants != null && participants.length > 1) {
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (ctx) => ArtistsBottomSheet(
+          artists: participants,
+          onArtistTap: (artist) {
+            Navigator.pop(ctx);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ArtistScreen(artistId: artist.id),
+              ),
+            );
+          },
+        ),
+      );
+      return;
+    }
+
+    final artistId = participants?.firstOrNull?.id ?? widget.song.artistId;
+    if (artistId != null && artistId.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ArtistScreen(artistId: artistId),
+        ),
+      );
     }
   }
 
